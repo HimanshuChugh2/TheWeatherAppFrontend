@@ -14,13 +14,15 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FormsModule } from '@angular/forms'; // Import this line
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     WeatherComponent,
-  ],
+    ],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -34,6 +36,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     BrowserAnimationsModule,
     MatGridListModule,
     FontAwesomeModule,
+    FormsModule,
+    MatProgressBarModule,
   ],
   providers: [WeatherService],
   bootstrap: [AppComponent]

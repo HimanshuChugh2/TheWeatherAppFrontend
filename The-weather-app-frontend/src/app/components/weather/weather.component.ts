@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WeatherData } from 'src/app/common/weather-data';
 import { WeatherDetails } from 'src/app/common/weather-details';
 import { WeatherService } from 'src/app/services/weather.service';
@@ -24,7 +24,7 @@ import { IconsNameConstants } from 'src/app/common/icons-name-constants';
 
 })
 
-export class WeatherComponent implements OnInit {
+export class WeatherComponent implements OnInit, OnDestroy {
   // weatherData: string ="";
   aspectRatio: number = 16 / 9; // Example aspect ratio
   cols: number = 3;
@@ -37,16 +37,26 @@ export class WeatherComponent implements OnInit {
   faCoffee = faWind;
   weatherIcon: string="";
   imageUrl: string = 'https://openweathermap.org/img/wn/02d@2x.png';
-
+  weatherDataFetched:boolean=false;
+  refreshIntervalStatus:boolean=false;
+  searchTextBox = 'Yokohama';
+  nextExecutionTime: number=0; // Holds the timestamp of the next interval execution
+  timeLeft: number=0; // Holds the time left until the next execution
   constructor(private weatherService: WeatherService,private breakpointObserver: BreakpointObserver) {
     this.weatherDetails = new WeatherDetails("", "", "", "", "", "");
     this.location = new Location("", "");
-    this.weatherSummary = new WeatherSummary("", "", "", "");
+    this.weatherSummary = new WeatherSummary("", "", "", "","");
     this.wind=new Wind("","");
     this.weatherData = new WeatherData(this.weatherDetails, this.weatherSummary, this.location, "Placename",this.wind)
     this.iconNames=new IconNames("humidity_low");
+
+  }
+  ngOnDestroy(): void {
+    throw new Error('Method not implemented.');
   }
   ngOnInit(): void {
+    console.log("processing ngOnInit");
+
     this.breakpointObserver.observe([
       Breakpoints.XSmall,
       Breakpoints.Small,
@@ -75,49 +85,75 @@ export class WeatherComponent implements OnInit {
         console.log("XLarge");
       }
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-    this.weatherService.getWeatherData().subscribe(
-      (response) => {
-        if (response != null) {
-          this.weatherData = response;
-          console.log(this.weatherData.weatherSummary.icon);
-          this.weatherData.weatherSummary.icon="https://openweathermap.org/img/wn/"+this.weatherData.weatherSummary.icon+"@2x.png";
-          
-
-          if(parseInt(this.weatherData.weatherDetails.humidity)<=40)
-          {
-            this.iconNames.humidity=IconsNameConstants.HUMIDITY_LOW;
-          }
-          else if(parseInt(this.weatherData.weatherDetails.humidity)>=60)
-          {
-            this.iconNames.humidity=IconsNameConstants.HUMIDITY_HIGH;
-          }
-          else
-          {
-            this.iconNames.humidity=IconsNameConstants.HUMIDITY_MID;
-          }
-          console.log("hi " +this.weatherData.weatherSummary.icon);
-        }
-      });
-    console.log("hi " +this.weatherData.weatherSummary.icon);
-
-
+ 
+  // if the search button was clicked, the weather will be updated after every 10 minutes
+  //  if(this.weatherDataFetched==true)
+  //  {
+  //   // this.weatherService.startInterval(this.getWeatherData, 10 * 60 * 1000); // 10 minutes in milliseconds
+    
+  //   this.weatherService.startInterval(this.getWeatherData, 10 * 1000); // 10 minutes in milliseconds
+  //  }
+  console.log("this.weatherDataFetched "+this.weatherDataFetched);
+  // if (this.weatherDataFetched) {
+  //   console.log("processing this.weatherDataFetched");
+  //   this.weatherService.startInterval(this.getWeatherData.bind(this), 10 * 1000); // 10 seconds
+  // }
 
   }
+  setWeatherDataFetched() {
+    this.weatherDataFetched = true;
+    this.startWeatherDataInterval();
+  }
+  // checking if the session is not already started, if yes, then skip, if no then start.
+  // 
+  startWeatherDataInterval() {
+    // in case the user clicks on search button, when the interval is active, the interval will be cleaned, and started again
+    // so that the time interval is updated
+    // so that when a new city is added to the textbox, it can be searched
+    if (this.weatherDataFetched) {
+      this.weatherService.stopInterval();
+      this.refreshIntervalStatus=true;
+      this.nextExecutionTime = Date.now() + 10 * 60 * 1000; // 10 seconds in the future
+      this.updateTimeLeft(); // Initial update
+      this.weatherService.startInterval(this.updateTimeLeft.bind(this), 1000); // Update every 1 second
+      this.weatherService.startInterval(this.getWeatherData.bind(this), 10 * 60 * 1000); // 5 mins
+    }
+  }
+  updateTimeLeft() {
+    this.timeLeft = Math.max(0, this.nextExecutionTime - Date.now());
+  }
+  formatTime(ms: number): string {
+    const minutes = Math.floor(ms / 60000); // Convert milliseconds to minutes
+    const seconds = Math.floor((ms % 60000) / 1000); // Convert remaining milliseconds to seconds
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  }
+  getWeatherData(): void {
+    console.log("processing getWeatherData");
+
+    this.weatherService.getWeatherData(this.searchTextBox).subscribe(
+      (response) => {
+        if (response != null) {
+          this.setWeatherDataFetched();
+          this.weatherData = response;
+
+          if (parseInt(this.weatherData.weatherDetails.humidity) <= 40) {
+            this.iconNames.humidity = IconsNameConstants.HUMIDITY_LOW;
+          } else if (parseInt(this.weatherData.weatherDetails.humidity) >= 60) {
+            this.iconNames.humidity = IconsNameConstants.HUMIDITY_HIGH;
+          } else {
+            this.iconNames.humidity = IconsNameConstants.HUMIDITY_MID;
+          }
+        }
+      }
+    );
+  }
+  
+
+
   calculateRowHeight() {
     const gridWidth = 700; // Example grid width in pixels
     return gridWidth / this.aspectRatio;
   }
+
+ 
 }

@@ -1,8 +1,10 @@
 export class WeatherSummary {
+
     constructor(private _id: string,
         private _main: string,
         private _description: string,
-        private _icon: string)
+        private _icon: string,
+        private _country: string)
         {}
     public get icon(): string {
         return this._icon;
@@ -28,5 +30,10 @@ export class WeatherSummary {
     public set id(value: string) {
         this._id = value;
     }
-
+    public get country(): string {
+        return this._country;
+    }
+    public set country(value: string) {
+        this._country = value;
+    }
 }
