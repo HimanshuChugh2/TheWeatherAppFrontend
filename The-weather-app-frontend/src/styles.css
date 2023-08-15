@@ -1,12 +1,10 @@
 /* styles.css */
 /* Define your colors */
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap');
+
 :root {
     --primary-color: #007bff;
     background-color: rgb(248, 237, 217);
-  }
-  
-  .mat-mdc-list-item-icon {
-    color: rgba(0, 0, 0, 0.54);
   }
 
 .no-line-break

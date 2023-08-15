@@ -11,7 +11,7 @@
     min-width: 400px;
     min-height: 180px;
     max-width: 400px;
-   
+   margin-left: 66px;
   }
   
   .example-header-image {
@@ -24,6 +24,8 @@
      margin-top: 10px;
      margin-left: 4px;
   }
+
+
 
   /* .custom-align-top {
     align-items: flex-start !important;

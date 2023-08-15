@@ -1,6 +1,4 @@
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-  <div>
-  </div>
   <mat-tab label="Search Weather">
     <br>
     <mat-card class="search-card">
@@ -21,7 +19,8 @@
       <mat-card-actions>
         <button mat-raised-button color="primary" (click)="getWeatherData()">
           <mat-icon>search</mat-icon>
-          Search</button>
+          Search</button> &nbsp;&nbsp;&nbsp;&nbsp;
+          <div *ngIf="refreshIntervalStatus">Refreshing in: {{ formatTime(timeLeft) }}</div>
       </mat-card-actions>
       <mat-card-footer>
         <mat-progress-bar mode="indeterminate" *ngIf="weatherDataFetched"></mat-progress-bar>
@@ -42,25 +41,8 @@
       </div> -->
     <br>
 
-    <!-- <mat-card class="example-card">
-      <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Weather in {{weatherData.placeName}}</mat-card-title>
-        <mat-card-subtitle>{{weatherData.weatherSummary.description}}</mat-card-subtitle>
-      </mat-card-header>
-      <img mat-card-image src="{{weatherData.weatherSummary.icon}}" alt="Visual representation of temperature" width="100px" height="100px">
-      <mat-card-content>
-        <p>
-          {{weatherData.weatherSummary.main}}
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button>LIKE</button>
-        <button mat-button>SHARE</button>
-      </mat-card-actions>
-    </mat-card> -->
     <div *ngIf="weatherDataFetched">
-      <div>Refreshing in: {{ formatTime(timeLeft) }}</div>
+      
 
       <mat-grid-list [cols]="cols" [rowHeight]="calculateRowHeight()">
         <mat-grid-tile>
@@ -81,9 +63,9 @@
               <mat-icon matListItemIcon>thermostat</mat-icon>
               <h2 class="no-line-break">{{weatherData.weatherDetails.temperature}}°C </h2>
 
-              <p class="no-line-break">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Feels like {{weatherData.weatherDetails.feelsLike}}°C</p>
+              <div class="no-line-break">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Feels like {{weatherData.weatherDetails.feelsLike}}°C</div>
               <img class="image-margin" src="assets/weather.jpg" alt="My Local Image" style="max-height: 180px;">
             </mat-card-content>
           </mat-card>
