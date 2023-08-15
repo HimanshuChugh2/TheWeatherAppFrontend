@@ -1,26 +1,8 @@
-<!--<div>
-  <fa-icon [icon]="faCoffee"></fa-icon>
-  <i class="fa-solid fa-cloud-sun" style="color: #949fb3;"></i>
-  <i class="{{weatherData.weatherSummary.icon}}" style="color: #949fb3;"></i> -->
-<!-- <img src="{{weatherData.weatherSummary.icon}}" width="100px" height="100px">
-</div> -->
-
-<!-- 
-<span class="material-symbols-outlined">
-  humidity_mid
-  </span> -->
-
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-
   <div>
-
-
-
   </div>
   <mat-tab label="Search Weather">
-
     <br>
-
     <mat-card class="search-card">
       <mat-card-header>
         <mat-card-subtitle>Search</mat-card-subtitle>
@@ -33,7 +15,7 @@
           <button *ngIf="searchTextBox" matSuffix mat-icon-button aria-label="Clear" (click)="searchTextBox=''">
             <mat-icon>close</mat-icon>
           </button>
-        </mat-form-field>  &nbsp;
+        </mat-form-field> &nbsp;
         <mat-divider></mat-divider>
       </mat-card-content>
       <mat-card-actions>
@@ -45,14 +27,6 @@
         <mat-progress-bar mode="indeterminate" *ngIf="weatherDataFetched"></mat-progress-bar>
       </mat-card-footer>
     </mat-card>
-
-
-
-
-
-
-
-
     <!-- <div> 
       <br>
       <mat-form-field class="example-form-field">
@@ -86,15 +60,16 @@
       </mat-card-actions>
     </mat-card> -->
     <div *ngIf="weatherDataFetched">
-      <div *ngIf="refreshIntervalStatus">Refreshing in: {{ formatTime(timeLeft) }}</div>
+      <div>Refreshing in: {{ formatTime(timeLeft) }}</div>
 
       <mat-grid-list [cols]="cols" [rowHeight]="calculateRowHeight()">
-        <mat-grid-tile custom-align-top>
+        <mat-grid-tile>
 
           <mat-card class="custom-width" style="background-color: rgb(251, 206, 110);">
             <mat-card-header>
               <mat-card-title-group>
-                <mat-card-title>Weather in {{weatherData.placeName}} ({{weatherData.weatherSummary.country}})</mat-card-title>
+                <mat-card-title>Weather in {{weatherData.placeName}}
+                  ({{weatherData.weatherSummary.country}})</mat-card-title>
                 <mat-card-subtitle> {{weatherData.weatherSummary.main}} ({{weatherData.weatherSummary.description}})
                 </mat-card-subtitle>
                 <img mat-card-md-image src="{{weatherData.weatherSummary.icon}}"
@@ -119,20 +94,18 @@
         <br>
         <br>
 
-        <mat-grid-tile custom-align-top>
+        <mat-grid-tile>
           <mat-card class="custom-width" style="background-color: rgb(251, 206, 110);">
+
+            <mat-card-header>
+              <mat-card-title-group>
+                <mat-card-title> More information</mat-card-title>
+                <!-- <mat-card-subtitle> Mat card Subtitle</mat-card-subtitle> -->
+
+              </mat-card-title-group>
+            </mat-card-header>
+
             <mat-list>
-              <div mat-subheader>More information </div>
-              <!-- <mat-list-item>
-            <mat-icon matListItemIcon>{{iconNames.feelsLike}} </mat-icon>
-            <div matListItemTitle>Feels like</div>
-            <div matListItemLine>{{weatherData.weatherDetails.feelsLike}}°C</div>
-          </mat-list-item> -->
-              <!-- <mat-list-item>
-            <mat-icon matListItemIcon>thermostat</mat-icon>
-            <div matListItemTitle>Temperature</div>
-            <div matListItemLine>{{weatherData.weatherDetails.temperature}}°C</div>
-          </mat-list-item> -->
               <mat-list-item>
                 <mat-icon matListItemIcon class="material-symbols-outlined">{{iconNames.humidity}}</mat-icon>
                 <div matListItemTitle>Humidity</div>
@@ -160,27 +133,17 @@
         </mat-grid-tile>
 
 
-        <mat-grid-tile custom-align-top>
+        <mat-grid-tile>
           <mat-card class="custom-width" style="background-color: rgb(251, 206, 110);">
+
+            <mat-card-header>
+              <mat-card-title-group>
+                <mat-card-title> Location and Wind info</mat-card-title>
+                <!-- <mat-card-subtitle> Mat card Subtitle</mat-card-subtitle> -->
+              </mat-card-title-group>
+            </mat-card-header>
+
             <mat-list>
-              <!-- <div mat-subheader>Weather in {{weatherData.placeName}}</div> -->
-
-
-              <!-- <mat-list-item>
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Card 1</mat-card-title>
-                <mat-card-subtitle>Subtitle</mat-card-subtitle>
-              </mat-card-header>
-               <img mat-card-image src="{{weatherData.weatherSummary.icon}}" width="100px" height="00px" >
-
-              <mat-card-content>
-                This is the content of Card 1.
-              </mat-card-content>
-            </mat-card>
-          </mat-list-item> -->
-
-              <div mat-subheader>Location and Wind info</div>
               <mat-list-item>
                 <mat-icon matListItemIcon>location_on</mat-icon>
                 <div matListItemTitle>Latitude</div>
@@ -208,24 +171,6 @@
             </mat-list>
           </mat-card>
         </mat-grid-tile>
-
-        <!-- <mat-grid-tile custom-align-top>
-        <mat-list>
-          <div mat-subheader>Location info</div>
-          <mat-list-item>
-            <mat-icon matListItemIcon>location_on</mat-icon>
-            <div matListItemTitle>Latitude</div>
-            <div matListItemLine>{{weatherData.location.latitude}}</div>
-          </mat-list-item>
-
-          <mat-list-item>
-            <mat-icon matListItemIcon>location_on</mat-icon>
-            <div matListItemTitle>Longitude</div>
-            <div matListItemLine>{{weatherData.location.longitude}}</div>
-          </mat-list-item>
-
-        </mat-list>
-      </mat-grid-tile> -->
 
       </mat-grid-list>
     </div>

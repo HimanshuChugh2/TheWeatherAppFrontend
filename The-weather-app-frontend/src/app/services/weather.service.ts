@@ -5,48 +5,80 @@ import { WeatherData } from '../common/weather-data';
 import { WeatherDetails } from 'src/app/common/weather-details';
 import { WeatherSummary } from 'src/app/common/weather-summary';
 import { Location } from 'src/app/common/location';
-import { IconNames } from 'src/app/common/icon-names';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Wind } from 'src/app/common/wind';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherService {
-  private baseUrl = "http://localhost:8080/weather?cityname=";
+  
+/**
+ * getWeatherByCityNameUrl is used to call API to get weather data by Cityname 
+ */
+  private getWeatherByCityNameUrl = "http://localhost:8080/weather?cityname=";
+
+/**
+ * APIから取得したデータを登録するようweatherDetails, location, weatherSummary, weatherData, wind の定義
+ */
   weatherDetails: WeatherDetails;
   location: Location;
   weatherSummary: WeatherSummary;
   weatherData: WeatherData;
   wind: Wind;
-  iconNames: IconNames;
-  private intervalId: any;
+ /**
+ * 定期的にAPI呼び出し、Weatherのデータを更新するためintervalIdを定義
+ */
+  private intervalIdUpdateTime: any;
+  private intervalIdFetchWeather: any;
 
+  /**
+ * 画面リフレッシュの残り時間計算のためのインタバル開始するメソッド
+ */
+  startUpdateTimeInterval(callback: () => void, interval: number): void {
+    console.log("starting startUpdateTimeInterval");
+    this.intervalIdUpdateTime = setInterval(callback, interval);
+  }
+  /**
+ * 定期的にAPI呼び出すためのインタバル開始するメソッド
+ */
+  startFetchWeatherInterval(callback: () => void, interval: number): void {
+    console.log("starting startFetchWeatherInterval");
+    this.intervalIdFetchWeather = setInterval(callback, interval);
+  }
+  /**
+ * 画面リフレッシュの残り時間計算のためのインタバル終了するメソッド
+ */
+  stopUpdateTimeInterval(): void {
+    console.log("stopping stopUpdateTimeInterval");
+    clearInterval(this.intervalIdUpdateTime);
+  }
+  /**
+ * 定期的にAPI呼び出すためのインタバル終了するメソッド
+ */
+  stopFetchWeatherInterval(): void {
+    console.log("stopping stopFetchWeatherInterval");
+    clearInterval(this.intervalIdFetchWeather);
+  }
 
-  constructor(private httpClient: HttpClient, private breakpointObserver: BreakpointObserver) {
+   /**
+ * 定義したフィールドの初期化。初期画面で表示されるデータを設定。
+ */
+  constructor(private httpClient: HttpClient) {
     this.weatherDetails = new WeatherDetails("", "", "", "", "", "");
     this.location = new Location("", "");
     this.weatherSummary = new WeatherSummary("", "", "", "","");
     this.wind = new Wind("", "");
-    this.weatherData = new WeatherData(this.weatherDetails, this.weatherSummary, this.location, "Placename", this.wind)
-    this.iconNames = new IconNames("humidity_low");
-
-
+    this.weatherData = new WeatherData(this.weatherDetails, this.weatherSummary, this.location, "", this.wind)
 
   }
 
-  startInterval(callback: () => void, interval: number): void {
-    console.log("starting interval");
-    this.intervalId = setInterval(callback, interval);
-  }
-  stopInterval(): void {
-    console.log("stopping interval");
-
-    clearInterval(this.intervalId);
-  }
-
+/**
+ * データ取得のためAPI呼び出し
+ * @param {string} searchTextBoxValue - 画面上で入力した市名
+ * @returns {WeatherData} 取得したデータをWeatherDataに登録しリターンする
+ */
   getWeatherData(searchTextBoxValue:string): (Observable<WeatherData>) {
-    return this.httpClient.get<WeatherData>(this.baseUrl+searchTextBoxValue).pipe(
+    return this.httpClient.get<WeatherData>(this.getWeatherByCityNameUrl+searchTextBoxValue).pipe(
       map(response => {
         if (response && response != null) {
           return this.processData(response);
@@ -57,15 +89,15 @@ export class WeatherService {
       ));
 
   }
-
+/**
+ * 取得したデータをWeatherDataに登録、取得した天気の写真のURLを作成。
+ * @param {WeatherData} response - APIで取得したデータ
+ * @returns {WeatherData} 取得したデータをWeatherDataに登録しリターンする
+ */
   private processData(response: WeatherData): WeatherData {
     console.log("processing data");
     const processedData = response;
-
-    console.log(this.weatherData.weatherSummary.icon);
     processedData.weatherSummary.icon = "https://openweathermap.org/img/wn/" + processedData.weatherSummary.icon + "@2x.png";
-
-    console.log("hi " + processedData.weatherSummary.icon);
     return processedData;
   }
 }
