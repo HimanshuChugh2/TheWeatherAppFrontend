@@ -1,3 +1,6 @@
+  /**
+   * 画面表示用アイコンのアイコン名を固定値で設定する
+   */
 export const IconsNameConstants ={
 
     HUMIDITY_LOW:"humidity_low",

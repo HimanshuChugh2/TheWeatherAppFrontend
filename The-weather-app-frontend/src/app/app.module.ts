@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { WeatherComponent } from './components/weather/weather.component';
 import { WeatherService } from './services/weather.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +16,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms'; // Import this line
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { HttpErrorInterceptor } from './ErrorHanding/error-interceptor.service'; // Adjust the import path
 
 
 @NgModule({
@@ -38,8 +39,16 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     FontAwesomeModule,
     FormsModule,
     MatProgressBarModule,
+    
   ],
-  providers: [WeatherService],
+  providers: [
+    WeatherService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

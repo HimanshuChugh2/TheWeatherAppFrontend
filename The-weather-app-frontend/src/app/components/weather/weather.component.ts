@@ -8,6 +8,8 @@ import { IconNames } from 'src/app/common/icon-names';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Wind } from 'src/app/common/wind';
 import { IconsNameConstants } from 'src/app/common/icons-name-constants';
+import { ErrorService } from 'src/app/ErrorHanding/error-service.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-weather',
@@ -22,6 +24,7 @@ export class WeatherComponent implements OnInit, OnDestroy {
    */
   aspectRatio: number = 16 / 9;
   cols: number = 3;
+  isSmallScreen :boolean=false;
   /**
  * APIから取得したデータを登録するようweatherDetails, location, weatherSummary, weatherData, wind の定義
  */
@@ -41,7 +44,11 @@ export class WeatherComponent implements OnInit, OnDestroy {
   searchTextBox = 'Yokohama';
   nextExecutionTime: number = 0; // Holds the timestamp of the next interval execution
   timeLeft: number = 0; // Holds the time left until the next execution
-  constructor(private weatherService: WeatherService, private breakpointObserver: BreakpointObserver) {
+  errorCode$ = this.errorService.errorCode$;
+  errorMessage$ = this.errorService.errorMessage$;
+  private subscriptions: Subscription[] = [];
+
+  constructor(private errorService: ErrorService, private weatherService: WeatherService, private breakpointObserver: BreakpointObserver) {
     this.weatherDetails = new WeatherDetails("", "", "", "", "", "");
     this.location = new Location("", "");
     this.weatherSummary = new WeatherSummary("", "", "", "", "");
@@ -54,6 +61,8 @@ export class WeatherComponent implements OnInit, OnDestroy {
     // コンポネント破棄後インタバル終了
     this.weatherService.stopFetchWeatherInterval();
     this.weatherService.stopUpdateTimeInterval();
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+
     // throw new Error('Method not implemented.');
   }
 
@@ -72,21 +81,26 @@ export class WeatherComponent implements OnInit, OnDestroy {
     ]).subscribe(result => {
       if (result.breakpoints[Breakpoints.XSmall]) {
         this.cols = 1;
+        this.isSmallScreen =true;
         console.log("XS");
       }
       if (result.breakpoints[Breakpoints.Small]) {
         this.cols = 1;
+        this.isSmallScreen =true;
         console.log("SMALL");
       }
       if (result.breakpoints[Breakpoints.Medium]) {
+        this.isSmallScreen =false;
         this.cols = 1;
         console.log("Medium");
       }
       if (result.breakpoints[Breakpoints.Large]) {
+        this.isSmallScreen =false;
         this.cols = 3;
         console.log("Large");
       }
       if (result.breakpoints[Breakpoints.XLarge]) {
+        this.isSmallScreen =false;
         this.cols = 3;
         console.log("XLarge");
       }
@@ -114,12 +128,27 @@ export class WeatherComponent implements OnInit, OnDestroy {
     console.log("processing getWeatherData");
     this.weatherService.getWeatherData(this.searchTextBox).subscribe(
       (response) => {
-        if (response != null) {
+        //データ受領のステータスはTRUEの場合
+        if (response != null && response.success==true) {
+          //エラーがないため画面からエラーの以前表示を消す
+          this.errorService.clearError();
           this.setWeatherDataFetched();
-          this.weatherData = response;
+          this.weatherData = response.data;
           this.iconNames.humidity = this.setHumidity(this.weatherData.weatherDetails.humidity);
         }
+        else
+        { console.log("in else 1");
       }
+      },
+
+      // (error) => {
+
+      //   console.log("ERROR DETECTED");
+      //   this.isCityNameInValid = true; // Set the error status to true when an error occurs
+        
+      // }
+
+
     );
   }
   /**
@@ -189,4 +218,11 @@ export class WeatherComponent implements OnInit, OnDestroy {
     const gridWidth = 700; // grid width in pixels
     return gridWidth / this.aspectRatio;
   }
+}
+
+interface CustomResponse<T> {
+  success: boolean;
+  errorCode: string;  
+  errorMessage: string;
+  data: T;
 }

@@ -1,18 +1,28 @@
+
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
   <mat-tab label="Search Weather">
+
     <br>
-    <mat-card class="search-card">
+    <mat-card [ngClass]="isSmallScreen ? 'search-card-small-screen' : 'search-card-large-screen' ">
       <mat-card-header>
         <mat-card-subtitle>Search</mat-card-subtitle>
         <!-- <mat-card-title>Shiba Inu</mat-card-title> -->
       </mat-card-header>
       <mat-card-content>
-        <mat-form-field class="example-form-field">
-          <mat-label>City Name</mat-label>
-          <input matInput type="text" [(ngModel)]="searchTextBox">
+        <mat-form-field class="search-text-box">
+          <mat-label>Enter City Name</mat-label>
+          <input matInput type="text" [(ngModel)]="searchTextBox" >
           <button *ngIf="searchTextBox" matSuffix mat-icon-button aria-label="Clear" (click)="searchTextBox=''">
             <mat-icon>close</mat-icon>
           </button>
+
+<!--           
+            <mat-error *ngIf="(errorCode$ | async) && (errorMessage$ | async)">
+              Error Code: {{ errorCode$ | async }} <br>
+              Error Message: {{ errorMessage$ | async }}
+              </mat-error> -->
+
+         
         </mat-form-field> &nbsp;
         <mat-divider></mat-divider>
       </mat-card-content>
@@ -23,6 +33,9 @@
           <div *ngIf="refreshIntervalStatus">Refreshing in: {{ formatTime(timeLeft) }}</div>
       </mat-card-actions>
       <mat-card-footer>
+        <span *ngIf="(errorCode$ | async) && (errorMessage$ | async)">
+          <p> &nbsp;&nbsp;{{ errorMessage$ | async }} ({{ errorCode$ | async }})</p>
+         </span>
         <mat-progress-bar mode="indeterminate" *ngIf="weatherDataFetched"></mat-progress-bar>
       </mat-card-footer>
     </mat-card>
@@ -40,22 +53,22 @@
         Search</button>
       </div> -->
     <br>
-
+    <br><br><br>
     <div *ngIf="weatherDataFetched">
-      
 
       <mat-grid-list [cols]="cols" [rowHeight]="calculateRowHeight()">
         <mat-grid-tile>
 
-          <mat-card class="custom-width" style="background-color: rgb(251, 206, 110);">
+          <mat-card class="info-card">
             <mat-card-header>
               <mat-card-title-group>
                 <mat-card-title>Weather in {{weatherData.placeName}}
                   ({{weatherData.weatherSummary.country}})</mat-card-title>
                 <mat-card-subtitle> {{weatherData.weatherSummary.main}} ({{weatherData.weatherSummary.description}})
                 </mat-card-subtitle>
+                
                 <img mat-card-md-image src="{{weatherData.weatherSummary.icon}}"
-                  alt="Visual representation of temperature" alt="Visual representation of temperature">
+                  alt="Visual representation of temperature">
 
               </mat-card-title-group>
             </mat-card-header>
@@ -64,9 +77,9 @@
               <h2 class="no-line-break">{{weatherData.weatherDetails.temperature}}°C </h2>
 
               <div class="no-line-break">
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Feels like {{weatherData.weatherDetails.feelsLike}}°C</div>
-              <img class="image-margin" src="assets/weather.jpg" alt="My Local Image" style="max-height: 180px;">
+                &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span>Feels like {{weatherData.weatherDetails.feelsLike}}°C</span></div>
+              <img [ngClass]="isSmallScreen ? 'nami-image-small-width' : 'nami-image-large-width'" src="assets/weather.jpg" alt="Nami Image">
             </mat-card-content>
           </mat-card>
         </mat-grid-tile>
@@ -77,7 +90,7 @@
         <br>
 
         <mat-grid-tile>
-          <mat-card class="custom-width" style="background-color: rgb(251, 206, 110);">
+          <mat-card class="info-card">
 
             <mat-card-header>
               <mat-card-title-group>
@@ -86,7 +99,7 @@
 
               </mat-card-title-group>
             </mat-card-header>
-
+<mat-card-content>
             <mat-list>
               <mat-list-item>
                 <mat-icon matListItemIcon class="material-symbols-outlined">{{iconNames.humidity}}</mat-icon>
@@ -111,12 +124,13 @@
               </mat-list-item>
 
             </mat-list>
+          </mat-card-content>
           </mat-card>
         </mat-grid-tile>
 
 
         <mat-grid-tile>
-          <mat-card class="custom-width" style="background-color: rgb(251, 206, 110);">
+          <mat-card class="info-card">
 
             <mat-card-header>
               <mat-card-title-group>
@@ -124,7 +138,7 @@
                 <!-- <mat-card-subtitle> Mat card Subtitle</mat-card-subtitle> -->
               </mat-card-title-group>
             </mat-card-header>
-
+<mat-card-content>
             <mat-list>
               <mat-list-item>
                 <mat-icon matListItemIcon>location_on</mat-icon>
@@ -151,6 +165,7 @@
               </mat-list-item>
 
             </mat-list>
+          </mat-card-content>
           </mat-card>
         </mat-grid-tile>
 

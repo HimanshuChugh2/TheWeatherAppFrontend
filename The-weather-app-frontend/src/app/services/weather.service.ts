@@ -77,18 +77,21 @@ export class WeatherService {
  * @param {string} searchTextBoxValue - 画面上で入力した市名
  * @returns {WeatherData} 取得したデータをWeatherDataに登録しリターンする
  */
-  getWeatherData(searchTextBoxValue:string): (Observable<WeatherData>) {
-    return this.httpClient.get<WeatherData>(this.getWeatherByCityNameUrl+searchTextBoxValue).pipe(
+  getWeatherData(searchTextBoxValue:string): (Observable<CustomResponse<WeatherData>>) {
+    return this.httpClient.get<CustomResponse<WeatherData>>(this.getWeatherByCityNameUrl+searchTextBoxValue).pipe(
       map(response => {
-        if (response && response != null) {
-          return this.processData(response);
+        if (response && response != null) { 
+          // i haave defined a new custom response entity class in spring side. and i am able to receive dat from that class to the angular app. I have also defined error-intercepter in angular side. it detects all api calls and wht response they gave. accordingly now i have to show popup when error occurs.
+         
+          const weatherData: WeatherData =this.processData(response.data);
+          response.data=weatherData;
+          return response;
         }
-        else { return this.weatherData; }
+        else { return response; }
 
       }
       ));
-
-  }
+}
 /**
  * 取得したデータをWeatherDataに登録、取得した天気の写真のURLを作成。
  * @param {WeatherData} response - APIで取得したデータ
@@ -100,4 +103,11 @@ export class WeatherService {
     processedData.weatherSummary.icon = "https://openweathermap.org/img/wn/" + processedData.weatherSummary.icon + "@2x.png";
     return processedData;
   }
+}
+
+interface CustomResponse<T> {
+  success: boolean;
+  errorCode: string;  
+  errorMessage: string;
+  data: T;
 }

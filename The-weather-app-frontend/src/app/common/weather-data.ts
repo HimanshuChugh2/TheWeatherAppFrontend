@@ -1,3 +1,6 @@
+  /**
+   * 受領データのWeatherDataに当てはまるDTOクラス
+   */
 import { Location } from "./location";
 import { WeatherDetails } from "./weather-details";
 import { WeatherSummary } from "./weather-summary";

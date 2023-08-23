@@ -1,3 +1,6 @@
+  /**
+   * 受領データのWindに当てはまるDTOクラス
+   */
 export class Wind {
     public get degree(): string {
         return this._degree;

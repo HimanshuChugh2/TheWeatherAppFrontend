@@ -1,30 +1,59 @@
-  .custom-width {
+  .info-card {
     /* max-width: 400px; */
     /* margin-bottom: 8px; */
-    min-width: 400px;
+    min-width: 390px;
     min-height: 400px;
     max-width: 400px;
-    margin: 10px;
+    /* margin: 10px; */
+    margin-bottom: 20px;
+    background-color: rgb(248, 237, 217);
+
   }
-  .search-card
+  .search-card-small-screen
   {
-    min-width: 400px;
+    min-width: 350px;
     min-height: 180px;
     max-width: 400px;
-   margin-left: 66px;
+   /* margin-left: 66px; */
+   /* background-color: rgb(248, 237, 217); */
+
+  }
+  .search-card-large-screen
+  {
+    min-width: 350px;
+    min-height: 180px;
+    max-width: 400px;
+    margin-left: 66px;
+   /* background-color: rgb(248, 237, 217); */
+
+  }
+  .search-text-box
+  {
+    max-width: 300px;
+    min-width: 300px;
+
   }
   
-  .example-header-image {
+  /* .example-header-image {
     background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
     background-size: cover;
-  }
+  } */
 
-  .image-margin
+  .nami-image-small-width
+  {
+     margin-top: 30px;
+     /* margin-left: 4px; */
+     max-height: 180px;
+     max-width:400px;
+
+  }
+  .nami-image-large-width
   {
      margin-top: 10px;
-     margin-left: 4px;
+     /* margin-left: 4px; */
+     max-height: 180px;
+     max-width:400px;
   }
-
 
 
   /* .custom-align-top {

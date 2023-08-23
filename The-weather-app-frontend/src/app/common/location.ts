@@ -1,8 +1,10 @@
+  /**
+   * 受領データのLocationに当てはまるDTOクラス
+   */
+
 export class Location {
     constructor(private _latitude: string,
         private _longitude: string){
-            this.latitude=_latitude;
-            this.longitude=_longitude;
         }
 
     public get longitude(): string {

@@ -1,3 +1,6 @@
+  /**
+   * 受領データのWeatherSummaryに当てはまるDTOクラス
+   */
 export class WeatherSummary {
 
     constructor(private _id: string,

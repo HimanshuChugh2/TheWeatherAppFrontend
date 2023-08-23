@@ -1,3 +1,6 @@
+  /**
+   * 受領データのWeatherDetailsに当てはまるDTOクラス
+   */
 export class WeatherDetails {
     constructor(private _temperature: string,
         private _feelsLike: string,
@@ -5,12 +8,7 @@ export class WeatherDetails {
         private _temperatureMax: string,
         private _pressure: string,
         private _humidity: string){
-            this._temperature=_temperature;
-            this._feelsLike=_feelsLike;
-            this.temperatureMin=_temperatureMin;
-            this.temperatureMax=_temperatureMax;
-            this.pressure=_pressure;
-            this.humidity=_humidity;
+            ;
         }
     public get humidity(): string {
         return this._humidity;
