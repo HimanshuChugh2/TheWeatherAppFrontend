@@ -16,7 +16,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { FormsModule } from '@angular/forms'; // Import this line
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-import { HttpErrorInterceptor } from './ErrorHanding/error-interceptor.service'; // Adjust the import path
+import { HttpErrorInterceptor } from './ErrorHanding/error-interceptor.service';
+import { IonicModule } from '@ionic/angular'; // Adjust the import path
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { HttpErrorInterceptor } from './ErrorHanding/error-interceptor.service';
     FontAwesomeModule,
     FormsModule,
     MatProgressBarModule,
+    IonicModule.forRoot(),
     
   ],
   providers: [
