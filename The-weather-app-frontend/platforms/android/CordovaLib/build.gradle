@@ -47,8 +47,7 @@ android {
     namespace 'org.apache.cordova'
 
     compileSdkVersion cordovaConfig.COMPILE_SDK_VERSION
-    // buildToolsVersion cordovaConfig.BUILD_TOOLS_VERSION
-     buildToolsVersion '33.0.2' // Specify the Android Build Tools version
+    buildToolsVersion cordovaConfig.BUILD_TOOLS_VERSION
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

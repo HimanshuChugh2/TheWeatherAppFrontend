@@ -197,7 +197,7 @@ android {
       abortOnError false
     }
 
-     buildToolsVersion '33.0.2' // Specify the Android Build Tools version
+    buildToolsVersion cordovaConfig.BUILD_TOOLS_VERSION
 
     // This code exists for Crosswalk and other Native APIs.
     // By default, we multiply the existing version code in the
