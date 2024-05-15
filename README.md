@@ -18,4 +18,4 @@ Step 4 : Import this spring-boot project in eclipse, and run it.
 
 The backend app will start and now you can insert a city name in the text box of the frontend app and the results will come as expected.
 
-Thanks for reading, I hope it was helpful.
+Thanks for reading.
